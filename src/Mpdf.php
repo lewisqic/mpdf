@@ -206,6 +206,7 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 	var $watermarkImage;
 	var $showWatermarkText;
 	var $showWatermarkImage;
+	var $hideFooterWatermark;
 
 	var $svgAutoFont;
 	var $svgClasses;
@@ -3176,7 +3177,7 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 			$this->Reset();
 			$this->pageoutput[$this->page] = [];
 
-			$this->Footer();
+			$this->Footer($this->hideFooterWatermark);
 			// Close page
 			$this->_endpage();
 		}
@@ -13132,7 +13133,7 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 	/* -- END WATERMARK -- */
 
 	// Page footer
-	function Footer()
+	function Footer($hideFooterWatermark = false)
 	{
 		/* -- CSS-PAGE -- */
 		// PAGED MEDIA - CROP / CROSS MARKS from @PAGE
@@ -13233,7 +13234,7 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 		if (($this->watermarkText) && ($this->showWatermarkText)) {
 			$this->watermark($this->watermarkText, $this->watermarkAngle, is_int($this->watermark_size) ? $this->watermark_size : 120, $this->watermarkTextAlpha); // Watermark text
 		}
-		if (($this->watermarkImage) && ($this->showWatermarkImage)) {
+		if (($this->watermarkImage) && ($this->showWatermarkImage) && !$hideFooterWatermark) {
 			$this->watermarkImg($this->watermarkImage, $this->watermarkImageAlpha); // Watermark image
 		}
 		/* -- END WATERMARK -- */
